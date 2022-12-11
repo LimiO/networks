@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 20:13:58 UTC Sat Dec 10 2022
+! Last configuration change at 21:44:50 UTC Sat Dec 10 2022
 !
 version 15.7
 service timestamps debug datetime msec
@@ -75,7 +75,7 @@ redundancy
 !
 interface Ethernet0/0
  no shutdown
- ip address 20.0.10.5 255.255.255.0
+ ip address 11.0.10.5 255.255.255.0
  duplex auto
 !
 interface Ethernet0/1

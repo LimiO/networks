@@ -1,6 +1,6 @@
 
 !
-! Last configuration change at 21:19:58 UTC Sat Dec 10 2022
+! Last configuration change at 21:44:24 UTC Sat Dec 10 2022
 !
 version 15.7
 service timestamps debug datetime msec
@@ -116,8 +116,9 @@ interface Ethernet0/1
 !
 interface Ethernet0/2
  no shutdown
- no ip address
- shutdown
+ ip address 11.0.10.5 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
  duplex auto
 !
 interface Ethernet0/3
