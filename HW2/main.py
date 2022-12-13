@@ -5,8 +5,8 @@ import sys
 
 class Application:
     def __init__(self, host):
-        self.min = 1
-        self.max = self.min
+        self.min = 0 # 0 потому что выбираю с самого начала и меньше просто нет
+        self.max = self.min + 1
         self.host = host
 
     def process(self):
@@ -51,6 +51,11 @@ def validate_icmp():
     print("Errors with ICMP")
     exit(1)
 
+def check_alive(host):
+    process = subprocess.Popen(['ping' , host, "-c", '1'])
+    if process.wait() != 0:
+        raise Exception("Bad host")
+
 
 if len(sys.argv) < 2:
     print("No host")
@@ -59,7 +64,8 @@ host = sys.argv[1]
 if not validators.domain(host):
     print("Given not valid host")
     exit(1)
+check_alive(host)
 validate_icmp()
 
 app = Application(sys.argv[1])
-print(app.process())
+print(app.process() + 28)
