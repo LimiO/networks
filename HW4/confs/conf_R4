@@ -1,0 +1,159 @@
+
+!
+! Last configuration change at 18:34:38 UTC Tue Dec 13 2022
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes
+ authentication pre-share
+ group 2
+crypto isakmp key albert address 111.222.30.2   
+!
+!
+crypto ipsec transform-set ALBERT-UNIT esp-aes 256 esp-sha-hmac 
+ mode transport
+!
+!
+!
+crypto map ALBERT-MAP 1 ipsec-isakmp 
+ set peer 111.222.30.2
+ set transform-set ALBERT-UNIT 
+ match address 101
+!
+!
+!
+!
+!
+interface Tunnel1
+ no shutdown
+ ip address 10.111.10.1 255.255.255.252
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ tunnel source 111.222.10.2
+ tunnel destination 111.222.20.2
+!
+interface Tunnel2
+ no shutdown
+ ip address 10.222.10.1 255.255.255.252
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ tunnel source 111.222.10.2
+ tunnel destination 111.222.30.2
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.0.10.1 255.255.255.0
+ duplex auto
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 111.222.10.2 255.255.255.0
+ duplex auto
+ crypto map ALBERT-MAP
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+ duplex auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 111.222.10.1
+ip route 10.0.20.2 255.255.255.255 10.111.10.2
+ip route 10.0.30.2 255.255.255.255 10.222.10.2
+!
+ipv6 ioam timestamp
+!
+!
+access-list 101 permit gre host 111.222.10.2 host 111.222.30.2
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
